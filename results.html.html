@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Result</title>
+</head>
+<body>
+
+<h1 align="center">Student Result Details</h1>
+
+<div id="result"></div>
+
+<script>
+
+let student = JSON.parse(
+    sessionStorage.getItem("studentData")
+);
+
+if (student) {
+
+    document.getElementById("result").innerHTML = `
+
+        <h2>Student Information</h2>
+
+        <p><b>Name:</b> ${student.name}</p>
+
+        <p><b>Gender:</b> ${student.gender}</p>
+
+        <p><b>Course:</b> ${student.courses.join(", ")}</p>
+
+        <h2>Marks & Grades</h2>
+
+        <table border="1" cellpadding="10">
+
+            <tr>
+                <th>Subject</th>
+                <th>Marks</th>
+                <th>Grade</th>
+            </tr>
+
+            <tr>
+                <td>Machine Learning</td>
+                <td>${student.marks[0]}</td>
+                <td>${student.grades[0]}</td>
+            </tr>
+
+            <tr>
+                <td>Computer Network</td>
+                <td>${student.marks[1]}</td>
+                <td>${student.grades[1]}</td>
+            </tr>
+
+            <tr>
+                <td>Architecture</td>
+                <td>${student.marks[2]}</td>
+                <td>${student.grades[2]}</td>
+            </tr>
+
+            <tr>
+                <th colspan="2">Average</th>
+                <th>${student.average}</th>
+            </tr>
+
+        </table>
+
+        <h2>Result Submitted Successfully!</h2>
+
+        <button onclick="window.print()">Print Result</button>
+
+        <button onclick="history.back()">Back</button>
+
+    `;
+
+} else {
+
+    document.getElementById("result").innerHTML =
+        "No student details found.";
+
+}
+
+</script>
+
+</body>
+</html>

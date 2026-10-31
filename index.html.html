@@ -1,0 +1,192 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Marks Calculator</title>
+</head>
+<body>
+
+<h1 align="center">Student Marks & Grade Calculator</h1>
+    <h3 align= "center">KJF.Sarafa SAM/IT/2025/F/0061</h3>
+<form id="studentForm">
+
+    <h3>Name</h3>
+    <input type="text" id="name" placeholder="Enter Name" required>
+
+    <h3>Gender</h3>
+    <input type="radio" name="gender" value="Male" required> Male
+    <input type="radio" name="gender" value="Female"> Female
+
+    <h3>Course</h3>
+    <input type="checkbox" name="course" value="HNDIT"> HNDIT
+    <input type="checkbox" name="course" value="HNDSE"> HNDSE
+    <input type="checkbox" name="course" value="HNDJA"> HNDJA
+
+    <h3>Student Marks</h3>
+
+    <table border="1" cellpadding="10">
+        <tr>
+            <th>Subject</th>
+            <th>Marks (0-100)</th>
+            <th>Grade</th>
+        </tr>
+
+        <tr>
+            <td>Machine Learning</td>
+            <td><input type="number" id="mark1" min="0" max="100" required></td>
+            <td id="grade1">-</td>
+        </tr>
+
+        <tr>
+            <td>Computer Network</td>
+            <td><input type="number" id="mark2" min="0" max="100" required></td>
+            <td id="grade2">-</td>
+        </tr>
+
+        <tr>
+            <td>Architecture</td>
+            <td><input type="number" id="mark3" min="0" max="100" required></td>
+            <td id="grade3">-</td>
+        </tr>
+
+        <tr>
+            <th colspan="2">Average</th>
+            <th id="average">0</th>
+        </tr>
+    </table>
+
+    <br>
+
+    <button type="button" onclick="calculate()">Calculate</button>
+
+    <h3 id="message"></h3>
+
+    <br>
+
+    <button type="submit">Submit</button>
+
+</form>
+
+<script>
+
+function getGrade(mark) {
+
+    if (mark >= 75) {
+        return "A";
+    }
+    else if (mark >= 60) {
+        return "B";
+    }
+    else if (mark >= 50) {
+        return "C";
+    }
+    else if (mark >= 35) {
+        return "D";
+    }
+    else {
+        return "F";
+    }
+
+}
+
+function calculate() {
+
+    let name = document.getElementById("name").value;
+
+    let m1 = Number(document.getElementById("mark1").value);
+    let m2 = Number(document.getElementById("mark2").value);
+    let m3 = Number(document.getElementById("mark3").value);
+
+    if (!name || document.getElementById("mark1").value === "" ||
+        document.getElementById("mark2").value === "" ||
+        document.getElementById("mark3").value === "") {
+        alert("Please enter all details");
+        return false;
+    }
+
+    if ([m1, m2, m3].some(m => m < 0 || m > 100)) {
+        alert("Marks must be between 0 and 100");
+        return false;
+    }
+
+    let g1 = getGrade(m1);
+    let g2 = getGrade(m2);
+    let g3 = getGrade(m3);
+
+    let avg = (m1 + m2 + m3) / 3;
+
+    document.getElementById("grade1").innerHTML = g1;
+    document.getElementById("grade2").innerHTML = g2;
+    document.getElementById("grade3").innerHTML = g3;
+
+    document.getElementById("average").innerHTML = avg.toFixed(2);
+
+    document.getElementById("message").innerHTML =
+        name + "'s results calculated successfully.";
+
+    return true;
+}
+
+document.getElementById("studentForm").onsubmit = function(event) {
+
+    event.preventDefault();
+
+    if (!this.reportValidity()) {
+        return;
+    }
+
+    if (!calculate()) {
+        return;
+    }
+
+    let gender = document.querySelector(
+        'input[name="gender"]:checked'
+    );
+
+    if (!gender) {
+        alert("Please select gender");
+        return;
+    }
+
+    let courses = [];
+
+    document.querySelectorAll(
+        'input[name="course"]:checked'
+    ).forEach(function(c) {
+        courses.push(c.value);
+    });
+
+    if (courses.length === 0) {
+        alert("Please select a course");
+        return;
+    }
+
+    let m1 = Number(document.getElementById("mark1").value);
+    let m2 = Number(document.getElementById("mark2").value);
+    let m3 = Number(document.getElementById("mark3").value);
+
+    let student = {
+        name: document.getElementById("name").value,
+        gender: gender.value,
+        courses: courses,
+        marks: [m1, m2, m3],
+        grades: [
+            getGrade(m1),
+            getGrade(m2),
+            getGrade(m3)
+        ],
+        average: ((m1 + m2 + m3) / 3).toFixed(2)
+    };
+
+    sessionStorage.setItem(
+        "studentData",
+        JSON.stringify(student)
+    );
+
+    window.location.href = "results.html.html";
+
+};
+
+</script>
+
+</body>
+</html>
